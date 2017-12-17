@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="em">
+	<head>
+		<meta charset="utf-8">
+		<title>GIPHY Assignment</title>
+		<link rel ="stylesheet" type="giphy.css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+
+<body>
+
+	<div id="comedianButtons"></div>
+	
+
+	<form id="comedian-form">
+		<label for="comedian-input">Add a Comedian</label>
+		<input type="text" id="comedian-input"><br>
+
+		<input id="addComedian" type="submit" value="Submit">
+	</form>
+
+	<div id="comedian"></div>
+
+	<!-- <img src="https://media1.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200_s.gif" data-still="https://media1.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200_s.gif" data-animate="https://media1.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200.gif" data-state="still" class="gif">
+	<img src="https://media2.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200_s.gif" data-still="https://media2.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200_s.gif" data-animate="https://media2.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200.gif" data-state="still" class="gif">
+	<img src="https://media3.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200_s.gif" data-still="https://media3.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200_s.gif" data-animate="https://media3.giphy.com/media/wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ/200.gif" data-state="still" class="gif"> -->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+// Create the various arrays with the different comedians
+
+var comedians = ["George Carlin", "Richard Pryor", "Rodney Dangerfield", "Lenny Bruce", "Dave Chappelle"]
+
+
+// Create a function called displayComedian that re-renders the HTML to display the appropriate content
+
+      function displayComedian() {
+
+// API Key: wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ
+
+        var comedian = $(this).attr("data-name");
+        var queryURL = "http://api.giphy.com/v1/gifs/search?api_key=wQ2yrISDeqG4Cn9d77PcqQ5YAt12u4ZJ=" + comedian + "=&limit=1"
+
+// Create an AJAX call for the specific comedian button being clicked
+
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+
+       	var comedianDiv = $("<div class='comedian'>");
+
+          // Storing the rating data
+        var rating = response.Rated;
+
+          // Creating an element to have the rating displayed
+        var pOne = $("<p>").text("Rating: " + rating);
+
+          // Displaying the rating
+        comedianDiv.append(pOne);
+
+          // Storing the plot
+        var plot = response.Plot;
+
+          // Retrieving the URL for the image
+        var imgURL = response.Poster;
+
+          // Creating an element to hold the image
+          var image = $("<img>").attr("src", imgURL);
+
+          // Appending the image
+          comedianDiv.append(image);
+
+          // Putting the entire movie above the previous movies
+          $("#comedianButtons").prepend(comedianDiv);
+        });
+
+// Example of still and animated images
+
+
+    $(".gif").on("click", function() {
+      // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+      var state = $(this).attr("data-state");
+      // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+      // Then, set the image's data-state to animate
+      // Else set src to the data-still value
+      if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+      } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+      }
+    });
+  </script>
+
+</body>
+</html>
